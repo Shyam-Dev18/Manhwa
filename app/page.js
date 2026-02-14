@@ -1,65 +1,139 @@
 import Image from "next/image";
+import Link from "next/link";
+import { getManhwaBySlug, getChaptersByManhwaSlug } from "@/lib/db";
+import StarRating from "@/components/StarRating";
+import ChapterList from "@/components/ChapterList";
 
-export default function Home() {
+// Default manhwa slug — this is the single-manhwa site
+const DEFAULT_SLUG = "the-max-level-players-100th-regression";
+
+export default async function HomePage() {
+  let manhwa = null;
+  let chapters = [];
+
+  try {
+    manhwa = await getManhwaBySlug(DEFAULT_SLUG);
+    if (manhwa) {
+      chapters = await getChaptersByManhwaSlug(DEFAULT_SLUG);
+    }
+  } catch (error) {
+    console.error("Failed to fetch manhwa data:", error);
+  }
+
+  // Fallback data if DB is empty or unreachable
+  if (!manhwa) {
+    manhwa = {
+      title: "The Max-Level Player's 100th Regression",
+      slug: DEFAULT_SLUG,
+      coverImage: "/cover.webp",
+      alternativeTitles: "The 100th Regression of the Max-Level Player, 만렙 플레이어의 100번째 회귀",
+      authors: "여운, 머프, 킹소다",
+      status: "Ongoing",
+      genres: ["Action", "Adventure", "Fantasy", "Mystery", "Psychological", "Shounen", "Tragedy", "Isekai"],
+      rating: 5,
+      views: 4403712,
+      synopsis:
+        "Individuals aged 15 to 25 across the globe find themselves thrust into a deadly game spanning twenty rounds. The protagonist, enabled by his unique regression capability, embarks on his 100th challenge. Having navigated the game 99 times before, he emerges with a power differential that sets him far apart from the rest. As he uncovers the condition for the final round—requiring a minimum of five participants—he strategically gathers a cohort to sidestep the repetition of past errors.",
+    };
+  }
+
+  const viewsFormatted = (manhwa.views || 0).toLocaleString();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <div className="max-w-5xl mx-auto px-4 py-6">
+      {/* Title */}
+      <h1 className="text-2xl md:text-3xl font-bold text-accent text-center mb-6">
+        {manhwa.title}
+      </h1>
+
+      {/* Cover & Info Section */}
+      <div className="flex flex-col md:flex-row gap-6 mb-8">
+        {/* Cover Image */}
+        <div className="flex-shrink-0 mx-auto md:mx-0">
+          <div className="w-56 md:w-64 rounded-lg overflow-hidden border border-border shadow-lg">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src={manhwa.coverImage || "/cover.jpg"}
+              alt={manhwa.title}
+              width={256}
+              height={384}
+              className="w-full h-auto object-cover"
+              priority
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
         </div>
-      </main>
+
+        {/* Info */}
+        <div className="flex-1 space-y-3">
+          {manhwa.alternativeTitles && (
+            <p className="text-sm">
+              <span className="text-text-primary font-semibold">Alternative : </span>
+              <span className="text-text-secondary">{manhwa.alternativeTitles}</span>
+            </p>
+          )}
+
+          {manhwa.authors && (
+            <p className="text-sm">
+              <span className="text-text-primary font-semibold">Author(s) : </span>
+              <span className="text-text-secondary">{manhwa.authors}</span>
+            </p>
+          )}
+
+          <p className="text-sm">
+            <span className="text-text-primary font-semibold">Status : </span>
+            <span className="text-text-secondary">{manhwa.status || "Ongoing"}</span>
+          </p>
+
+          {manhwa.genres && (
+            <p className="text-sm">
+              <span className="text-text-primary font-semibold">Genres : </span>
+              <span className="text-text-secondary">
+                {Array.isArray(manhwa.genres) ? manhwa.genres.join(" – ") : manhwa.genres}
+              </span>
+            </p>
+          )}
+
+          <p className="text-sm">
+            <span className="text-text-primary font-semibold">Views : </span>
+            <span className="text-text-secondary">{viewsFormatted}</span>
+          </p>
+
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-text-primary font-semibold">Rating : </span>
+            <StarRating rating={manhwa.rating || 5} />
+          </div>
+        </div>
+      </div>
+
+      {/* Synopsis */}
+      {manhwa.synopsis && (
+        <div className="mb-8 bg-bg-card border border-border rounded-lg p-5">
+          <h2 className="text-sm font-semibold text-text-primary mb-2">Story :</h2>
+          <p className="text-sm text-text-secondary leading-relaxed">{manhwa.synopsis}</p>
+        </div>
+      )}
+
+      {/* CTA */}
+      <div className="text-center mb-8">
+        <p className="text-accent font-semibold text-lg mb-3">New reader? Start here:</p>
+        {chapters.length > 0 ? (
+          <Link
+            href={`/${manhwa.slug}/chapter-1`}
+            className="inline-block px-8 py-3 bg-accent hover:bg-accent-hover text-white font-bold rounded-lg transition-colors shadow-lg shadow-accent/20"
+          >
+            First Chapter
+          </Link>
+        ) : (
+          <span className="inline-block px-8 py-3 bg-bg-card text-text-muted font-bold rounded-lg cursor-not-allowed">
+            Coming Soon
+          </span>
+        )}
+      </div>
+
+      {/* Chapter List */}
+      <div className="mb-8">
+        <h2 className="text-xl font-bold text-accent text-center mb-4">All Chapters</h2>
+        <ChapterList chapters={chapters} manhwaSlug={manhwa.slug} />
+      </div>
     </div>
   );
 }
