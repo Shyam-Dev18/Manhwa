@@ -49,7 +49,7 @@ export default async function HomePage() {
       {/* Cover & Info Section */}
       <div className="flex flex-col md:flex-row gap-6 mb-8">
         {/* Cover Image */}
-        <div className="flex-shrink-0 mx-auto md:mx-0">
+        <div className="shrink-0 mx-auto md:mx-0">
           <div className="w-56 md:w-64 rounded-lg overflow-hidden border border-border shadow-lg">
             <Image
               src={manhwa.coverImage || "/cover.jpg"}

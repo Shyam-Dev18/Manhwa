@@ -18,6 +18,8 @@ export const metadata = {
     "read online",
     "free manhwa",
   ],
+  authors: [{ name: "Shyam", url: "https://github.com/Shyam-Dev18" }],
+  creator: "Shyam",
   openGraph: {
     title: "The Max-Level Player's 100th Regression - 100Regression",
     description: "Read The Max-Level Player's 100th Regression manhwa online in high quality.",

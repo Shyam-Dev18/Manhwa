@@ -45,6 +45,20 @@ export default function AboutPage() {
           </a>
         </p>
 
+        <h2 className="text-lg font-semibold text-text-primary pt-4">Built By</h2>
+        <p>
+          This website is built and maintained by{" "}
+          <a
+            href="https://github.com/Shyam-Dev18"
+            className="text-accent hover:text-accent-hover transition-colors font-medium"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Shyam
+          </a>
+          .
+        </p>
+
         <h2 className="text-lg font-semibold text-text-primary pt-4">Disclaimer</h2>
         <p>
           All content on this website belongs to their respective creators and publishers.

@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
           {/* Brand */}
           <div>
-            <h3 className="text-accent font-bold text-lg mb-2">100Regression</h3>
+            <h3 className="text-accent font-bold text-lg mb-2">ManhwaVerse</h3>
             <p className="text-text-muted leading-relaxed">
               Read The Max-Level Player&apos;s 100th Regression and other manhwa in high quality.
             </p>
@@ -40,17 +40,28 @@ export default function Footer() {
             <p className="text-text-muted">
               Email:{" "}
               <a
-                href={`mailto:${process.env.CONTACT_EMAIL || "contact@100regression.com"}`}
+                href={`mailto:${process.env.CONTACT_EMAIL || "contact@manhwaverse.com"}`}
                 className="text-accent hover:text-accent-hover transition-colors"
               >
-                {process.env.CONTACT_EMAIL || "contact@100regression.com"}
+                {process.env.CONTACT_EMAIL || "contact@manhwaverse.com"}
               </a>
             </p>
           </div>
         </div>
 
         <div className="mt-8 pt-4 border-t border-border text-center text-text-muted text-xs">
-          © {year} 100Regression. All rights reserved. All content belongs to their respective owners.
+          <p>© {year} ManhwaVerse. All rights reserved. All content belongs to their respective owners.</p>
+          <p className="mt-1">
+            Built by{" "}
+            <a
+              href="https://github.com/Shyam-Dev18"
+              className="text-accent hover:text-accent-hover transition-colors"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Shyam
+            </a>
+          </p>
         </div>
       </div>
     </footer>
